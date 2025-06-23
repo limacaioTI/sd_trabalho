@@ -1,0 +1,37 @@
+# Explicação: Fila de Prioridade no RabbitMQ
+
+## O que é?
+A fila de prioridade permite que mensagens mais importantes (com maior prioridade) sejam consumidas antes das menos importantes, mesmo que tenham sido enviadas depois.
+
+## Como foi implementado
+- A fila foi criada com o argumento `x-max-priority`, permitindo definir prioridades de 0 a 10.
+- O producer (`priority_producer.py`) envia dez mensagens, cada uma com uma prioridade diferente (1... 5 ... 10).
+- O consumer (`priority_consumer.py`) consome as mensagens e exibe a prioridade de cada uma ao receber.
+
+## Como testar corretamente
+1. **Pare o consumer** (se estiver rodando).
+2. **Rode o producer** para enviar as mensagens:
+   ```
+   python persintence/priority_producer.py
+   ```
+3. **Depois** rode o consumer:
+   ```
+   python persintence/priority_consumer.py
+   ```
+
+## O que se espera ver
+A ordem de recebimento deve ser:
+```
+[x] RECEBIDO: Mensagem prioridade alta (prioridade 10)
+...
+[x] RECEBIDO: Mensagem prioridade média (prioridade 5)
+...
+[x] RECEBIDO: Mensagem prioridade baixa (prioridade 1)
+```
+
+## Observações
+- Se rodar o consumer antes do producer, as mensagens podem ser consumidas na ordem de envio, pois não ficam acumuladas na fila.
+- Sempre teste enviando todas as mensagens primeiro, depois consumindo.
+
+## Conclusão
+A implementação comprova que o RabbitMQ entrega primeiro as mensagens de maior prioridade, validando o funcionamento correto da fila de prioridade. 
